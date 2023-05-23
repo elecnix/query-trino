@@ -1,0 +1,18 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Query
+        id: query
+        uses: ./
+        with:
+          config: |
+            user=${{ vars.TRINO_USERNAME }}
+            server=https://starbursttelemetry-data-lake.trino.galaxy.starburst.io
+          password: '${{ secrets.TRINO_PASSWORD }}'
+      - name: Get output
+        run: echo "${{ steps.query.outputs.result }}"

@@ -1,0 +1,35 @@
+name: 'Run query in Trino'
+description: 'Execute SQL using Trino'
+inputs:
+  config:
+    description: 'Trino Configuration file contents'
+    required: true
+  version:
+    description: 'Trino version'
+    required: false
+    default: 418
+  query:
+    description: 'SQL query to run'
+    required: false
+    default: 'SELECT 1;'
+  output-format:
+    description: 'Output format'
+    required: false
+    default: ALIGNED
+  password:
+    description: 'Optional password to pass as TRINO_PASSWORD to the Trino CLI'
+    required: false
+outputs:
+  result:
+    description: 'The query result'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.config }}
+  env:
+    TRINO_VERSION: ${{ inputs.version }}
+    TRINO_CONFIG: ${{ inputs.config }}
+    TRINO_QUERY: ${{ inputs.query }}
+    TRINO_OUTPUT_FORMAT: ${{ inputs.output-format }}
+    TRINO_PASSWORD: '${{ inputs.password }}'
