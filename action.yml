@@ -12,6 +12,9 @@ inputs:
     description: 'SQL query to run'
     required: false
     default: 'SELECT 1;'
+  query-file:
+    description: 'Path to a file containing the SQL to run'
+    required: false
   output-format:
     description: 'Output format'
     required: false
@@ -31,5 +34,6 @@ runs:
     TRINO_VERSION: ${{ inputs.version }}
     TRINO_CONFIG: ${{ inputs.config }}
     TRINO_QUERY: ${{ inputs.query }}
+    TRINO_QUERY_FILE: ${{ inputs.query-file }}
     TRINO_OUTPUT_FORMAT: ${{ inputs.output-format }}
     TRINO_PASSWORD: '${{ inputs.password }}'

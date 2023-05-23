@@ -10,9 +10,21 @@ jobs:
         id: query
         uses: ./
         with:
+          query: "SELECT 'This is query' AS out;"
           config: |
             user=${{ vars.TRINO_USERNAME }}
             server=https://starbursttelemetry-data-lake.trino.galaxy.starburst.io
           password: '${{ secrets.TRINO_PASSWORD }}'
-      - name: Get output
-        run: echo "${{ steps.query.outputs.result }}"
+      - name: Run Query File
+        id: query-file
+        uses: ./
+        with:
+          query-file: test/query.sql
+          config: |
+            user=${{ vars.TRINO_USERNAME }}
+            server=https://starbursttelemetry-data-lake.trino.galaxy.starburst.io
+          password: '${{ secrets.TRINO_PASSWORD }}'
+      - name: Get outputs
+        run: |
+          echo "${{ steps.query.outputs.result }}"
+          echo "${{ steps.query-file.outputs.result }}"

@@ -8,8 +8,16 @@ echo "TRINO_OUTPUT_FORMAT: ${TRINO_OUTPUT_FORMAT}"
 TRINO_CONFIG_FILE="$HOME/.trino_config"
 echo "$TRINO_CONFIG" > "$TRINO_CONFIG_FILE"
 
-TRINO_QUERY_FILE="$HOME/.trino_query"
-echo "$TRINO_QUERY" > "$TRINO_QUERY_FILE"
+if [ -n "$TRINO_QUERY_FILE" ] ; then
+    FILE=$GITHUB_WORKSPACE/$TRINO_QUERY_FILE
+else
+    if [ -z "$TRINO_QUERY" ] ; then
+        echo >&2 "TRINO_QUERY or TRINO_QUERY_FILE must be provided"
+        exit 1
+    fi
+    FILE="$HOME/.trino_query"
+    echo "$TRINO_QUERY" > "$FILE"
+fi
 
 curl -fLOsS "https://repo1.maven.org/maven2/io/trino/trino-cli/${TRINO_VERSION}/trino-cli-${TRINO_VERSION}-executable.jar"
 mv "trino-cli-${TRINO_VERSION}-executable.jar" /usr/local/bin/trino
@@ -21,7 +29,7 @@ echo "result<<$EOF" >> "$GITHUB_OUTPUT"
 echo >&2 "Executing query..."
 TRINO_CONFIG=$TRINO_CONFIG_FILE java -Dorg.jline.terminal.dumb=true -jar "$(command -v trino)" \
     --password \
-    -f "$TRINO_QUERY_FILE" \
+    -f "$FILE" \
     --output-format="$TRINO_OUTPUT_FORMAT" >> "$GITHUB_OUTPUT"
 
 echo "$EOF" >> "$GITHUB_OUTPUT"
