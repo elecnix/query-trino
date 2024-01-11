@@ -2,8 +2,8 @@ repo_name: elecnix/query-trino
 report_id: ac256419dbb00d10dc4ab0652fca3b12
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T09:21:28+00:00'
-requested_by: web-flow
+timestamp: '2024-01-11T12:21:19+00:00'
+requested_by: stack-file[bot]
 provider: github
 branch: master
 detected_tools_count: 5
